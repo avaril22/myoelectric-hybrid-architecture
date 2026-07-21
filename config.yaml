@@ -1,0 +1,74 @@
+# Model Configurations
+model:
+  name: "Large_500ms"
+  num_electrodes: 16
+  num_classes: 52
+  kernel_size: 3
+  dropout: 0.2
+  num_heads: 4
+
+# Receptive Field Configurations
+rf_configs:
+  Short_150ms:
+    layers: 5
+    channels: [64, 64, 128, 128, 256]
+    dilations: [1, 2, 4, 8, 16]
+    rf_samples: 253
+    rf_ms: 126.5
+    
+  Medium_250ms:
+    layers: 7
+    channels: [64, 64, 128, 128, 256, 256, 256]
+    dilations: [1, 2, 4, 8, 16, 32, 64]
+    rf_samples: 509
+    rf_ms: 254.5
+    
+  Large_500ms:
+    layers: 8
+    channels: [64, 64, 128, 128, 256, 256, 256, 256]
+    dilations: [1, 2, 4, 8, 16, 32, 64, 128]
+    rf_samples: 1021
+    rf_ms: 510.5
+    
+  XLarge_1000ms:
+    layers: 9
+    channels: [64, 64, 128, 128, 256, 256, 256, 256, 512]
+    dilations: [1, 2, 4, 8, 16, 32, 64, 128, 256]
+    rf_samples: 2045
+    rf_ms: 1022.5
+
+# Training
+training:
+  batch_size: 128
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  max_epochs: 100
+  patience: 15
+  
+  # EWC
+  ewc_lambda: 1000.0
+  ewc_fisher_samples: 200
+
+# Data
+data:
+  raw_fs: 1111
+  target_fs: 2000
+  bandpass_low: 20
+  bandpass_high: 450
+  filter_order: 4
+  window_size_sec: 2.0
+  window_overlap: 0.5
+  normalization: "zscore"
+  
+# Paths
+paths:
+  data_dir: "data/ninapro_db8"
+  results_dir: "results"
+  checkpoints_dir: "checkpoints"
+
+# Ablation Study
+ablation:
+  subjects: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  calibration_percentages: [0.05, 0.10]
+  num_runs: 3
+  configs: ["Short_150ms", "Medium_250ms", "Large_500ms", "XLarge_1000ms"]
