@@ -13,12 +13,12 @@ Hybrid Temporal Convolutional Network (TCN) + multi-head spatial attention for p
 
 ```bash
 # Install
-git clone https://github.com/yourusername/pediatric-myoelectric-tcn.git
-cd pediatric-myoelectric-tcn
+git clone https://github.com/avaril22/myoelectric-hybrid-architecture.git
+cd myoelectric-hybrid-architecture
 pip install -r requirements.txt
 pip install -e .
 
-# Download NinaPro DB8 to data/ninapro_db8/
+# Download NinaPro DB8 to data/ninapro_db8/ (https://ninapro.hevs.ch/instructions/DB8.html)
 
 # Run quick test (1 subject, 3 configs)
 bash scripts/run_rf_ablation_quick.sh
@@ -33,10 +33,10 @@ EMG (16 channels, 2000Hz)
   → Global Avg Pool → FC Classifier → 52 classes
 
 ## Repository Structure
-├── src/models/          # TCN, attention, hybrid architecture
-├── src/training/        # EWC, training loops
-├── src/utils/           # Preprocessing, data loading
-├── experiments/         # Training scripts, ablation study
-├── configs/             # Model hyperparameters (YAML)
-├── tests/               # Unit tests for RF calculation
-└── notebooks/           # Results analysis
+├── src/models/          # TCN, attention, hybrid architecture <br>
+├── src/training/        # EWC, training loops  <br>
+├── src/utils/           # Preprocessing, data loading <br>
+├── experiments/         # Training scripts, ablation study <br>
+├── configs/             # Model hyperparameters (YAML) <br>
+├── tests/               # Unit tests for RF calculation <br>
+└── notebooks/           # Results analysis<br>
