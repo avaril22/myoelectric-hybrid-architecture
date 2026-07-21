@@ -1,52 +1,42 @@
 # Pediatric Myoelectric Prosthetic Control with Hybrid TCN Architecture
 
-This repository contains the implementation of a hybrid Temporal Convolutional Network (TCN) with multi-head spatial attention for pediatric myoelectric prosthetic control with minimal calibration requirements.
+Hybrid Temporal Convolutional Network (TCN) + multi-head spatial attention for pediatric myoelectric prosthetic control with minimal calibration.
 
 ## Key Features
 
-- **Hybrid Architecture**: Combines temporal feature extraction (TCN) with spatial attention across EMG channels
-- **Continual Learning**: Implements Elastic Weight Consolidation (EWC) to prevent catastrophic forgetting
-- **Minimal Calibration**: Achieves 81-86% accuracy with only 5-10% subject-specific data
-- **Receptive Field Ablation**: Systematic study of temporal context requirements (150ms - 1000ms)
+- 81-86% accuracy with only 5-10% subject-specific calibration data
+- 8-layer TCN with 510ms receptive field (1.9M parameters)
+- Elastic Weight Consolidation (EWC) prevents catastrophic forgetting
+- Validated on NinaPro DB8 (12 subjects, 52 gestures, 16 EMG channels)
 
-## Architecture Details
-
-- **TCN Backbone**: 8-layer temporal convolutional network with exponential dilation
-- **Receptive Field**: 510ms (1021 samples at 2000Hz)
-- **Parameters**: ~1.9M total (TCN: 1.64M, Attention: 263k, Classifier: 33k)
-- **Dataset**: NinaPro DB8 (12 subjects, 52 gestures, 16 EMG channels)
-
-## Installation
-
-### Prerequisites
-
-- Python 3.8 or higher
-- CUDA-capable GPU (recommended)
-- 16GB+ RAM
-
-### Step-by-Step Setup
+## Quick Start
 
 ```bash
-# Clone repository
+# Install
 git clone https://github.com/yourusername/pediatric-myoelectric-tcn.git
 cd pediatric-myoelectric-tcn
-
-# Create conda environment
-conda create -n myoelectric python=3.9
-conda activate myoelectric
-
-# Install PyTorch (adjust for your CUDA version)
-# For CUDA 11.8:
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-
-# For CPU only:
-# pip install torch torchvision torchaudio
-
-# Install other dependencies
 pip install -r requirements.txt
-
-# Install package in development mode
 pip install -e .
 
-# Verify installation
-python -c "import torch; print(f'PyTorch {torch.__version__}, CUDA available: {torch.cuda.is_available()}')"
+# Download NinaPro DB8 to data/ninapro_db8/
+
+# Run quick test (1 subject, 3 configs)
+bash scripts/run_rf_ablation_quick.sh
+
+# Train full model
+python experiments/run_hybrid.py --subjects 1 2 3 4 5 6 7 8 9 10 11 12 --calibration 0.05
+```
+## Architecture
+EMG (16 channels, 2000Hz) 
+  → Per-Channel TCN (8 layers, dilations [1,2,4,8,16,32,64,128])
+  → Multi-Head Spatial Attention (4 heads)
+  → Global Avg Pool → FC Classifier → 52 classes
+
+## Repository Structure
+├── src/models/          # TCN, attention, hybrid architecture
+├── src/training/        # EWC, training loops
+├── src/utils/           # Preprocessing, data loading
+├── experiments/         # Training scripts, ablation study
+├── configs/             # Model hyperparameters (YAML)
+├── tests/               # Unit tests for RF calculation
+└── notebooks/           # Results analysis
